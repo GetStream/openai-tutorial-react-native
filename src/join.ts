@@ -1,5 +1,4 @@
 import { Call, StreamVideoClient } from "@stream-io/video-react-native-sdk";
-import { PermissionsAndroid, Platform } from "react-native";
 
 interface CallCredentials {
   apiKey: string;
@@ -27,36 +26,9 @@ export async function fetchCallCredentials() {
   };
 }
 
-async function requestAudioPermission() {
-  if (Platform.OS !== "android") return true;
-
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      {
-        title: "Microphone Permission",
-        message: "App needs access to your microphone to make calls.",
-        buttonNeutral: "Ask Me Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK",
-      }
-    );
-    return granted === PermissionsAndroid.RESULTS.GRANTED;
-  } catch (err) {
-    console.warn(err);
-    return false;
-  }
-}
-
 export async function joinCall(
   credentials: CallCredentials
 ): Promise<[client: StreamVideoClient, call: Call]> {
-  // Request permission before joining
-  const hasPermission = await requestAudioPermission();
-  if (!hasPermission) {
-    throw new Error("Microphone permission denied");
-  }
-
   const client = new StreamVideoClient({
     apiKey: credentials.apiKey,
     user: { id: credentials.userId },
