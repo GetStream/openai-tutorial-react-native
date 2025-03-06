@@ -7,7 +7,7 @@ interface CallCredentials {
   cid: string;
 }
 
-const baseUrl = "https://3f66-46-217-121-34.ngrok-free.app";
+const baseUrl = "your localhost url here";
 
 export async function fetchCallCredentials() {
   const res = await fetch(`${baseUrl}/credentials`);
