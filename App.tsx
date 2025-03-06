@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import React, { useState } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
 import {
   Call,
   HangUpCallButton,
@@ -8,10 +8,10 @@ import {
   StreamVideoClient,
   useCall,
   useCallStateHooks,
-} from '@stream-io/video-react-native-sdk';
-import {fetchCallCredentials, joinCall} from './src/join';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {AudioVisualizer} from './src/AudioVisualizer';
+} from "@stream-io/video-react-native-sdk";
+import { fetchCallCredentials, joinCall } from "./src/join";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AudioVisualizer } from "./src/AudioVisualizer";
 
 const credentialsPromise = fetchCallCredentials();
 
@@ -19,48 +19,48 @@ function App(): React.JSX.Element {
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   const [call, setCall] = useState<Call | null>(null);
   const [status, setStatus] = useState<
-    'start' | 'joining' | 'awaiting-agent' | 'joined-with-agent' | 'end'
-  >('start');
+    "start" | "joining" | "awaiting-agent" | "joined-with-agent" | "end"
+  >("start");
 
   const handleJoin = () => {
-    setStatus('joining');
+    setStatus("joining");
     credentialsPromise
-      .then(credentials => joinCall(credentials))
+      .then((credentials) => joinCall(credentials))
       .then(([client, call]) => {
         setClient(client);
         setCall(call);
-        setStatus('joined-with-agent');
+        setStatus("joined-with-agent");
       })
       .catch((err: any) => {
-        console.error('Could not join call', err);
-        setStatus('start');
+        console.error("Could not join call", err);
+        setStatus("start");
       });
   };
 
   const handleLeave = () => {
-    setStatus('start');
+    setStatus("start");
   };
 
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
-        {status === 'start' && (
+        {status === "start" && (
           <View style={styles.joinContainer}>
             <Button title="Click to talk with AI" onPress={handleJoin} />
           </View>
         )}
-        {(status === 'joining' || status === 'awaiting-agent') && (
+        {(status === "joining" || status === "awaiting-agent") && (
           <View style={styles.textContainer}>
             <Text style={styles.statusText}>Waiting for agent to join...</Text>
           </View>
         )}
-        {client && call && status !== 'start' && (
+        {client && call && status !== "start" && (
           <View style={styles.callContainer}>
             <StreamVideo client={client}>
               <StreamCall call={call}>
-                {status !== 'end' ? (
+                {status !== "end" ? (
                   <CallLayout
-                    onAgentJoined={() => setStatus('joined-with-agent')}
+                    onAgentJoined={() => setStatus("joined-with-agent")}
                     onLeave={handleLeave}
                   />
                 ) : (
@@ -75,12 +75,17 @@ function App(): React.JSX.Element {
   );
 }
 
-function CallLayout(props: {onAgentJoined?: () => void; onLeave?: () => void}) {
+function CallLayout(props: {
+  onAgentJoined?: () => void;
+  onLeave?: () => void;
+}) {
   const call = useCall();
-  const {useParticipants} = useCallStateHooks();
+  const { useParticipants } = useCallStateHooks();
   const participants = useParticipants();
-  const agentParticipant = participants.find(p => p.userId === 'lucy') ?? null;
-  const humanParticipant = participants.find(p => p.userId !== 'lucy') ?? null;
+  const agentParticipant =
+    participants.find((p) => p.userId === "lucy") ?? null;
+  const humanParticipant =
+    participants.find((p) => p.userId !== "lucy") ?? null;
   const audioLevel = agentParticipant?.isDominantSpeaker
     ? agentParticipant?.audioLevel
     : humanParticipant?.audioLevel;
@@ -89,7 +94,7 @@ function CallLayout(props: {onAgentJoined?: () => void; onLeave?: () => void}) {
     <>
       {agentParticipant && (
         <AudioVisualizer
-          colorScheme={agentParticipant.isDominantSpeaker ? 'blue' : 'red'}
+          colorScheme={agentParticipant.isDominantSpeaker ? "blue" : "red"}
           audioLevel={audioLevel || 0}
         />
       )}
@@ -108,33 +113,33 @@ function CallLayout(props: {onAgentJoined?: () => void; onLeave?: () => void}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
   },
   joinContainer: {
     flex: 1,
-    justifyContent: 'center',
-    width: '100%',
-    alignItems: 'center',
+    justifyContent: "center",
+    width: "100%",
+    alignItems: "center",
   },
   textContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   callContainer: {
     flex: 1,
     padding: 16,
-    width: '100%',
+    width: "100%",
   },
   statusText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
   callControls: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 16,
   },
 });
