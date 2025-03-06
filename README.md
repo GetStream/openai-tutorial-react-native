@@ -13,6 +13,9 @@ A React Native application that implements OpenAI integration for audio calls wi
 - first you need to start the backend server.
   More info on the backend server can be found [here](https://github.com/GetStream/openai-tutorial-node?tab=readme-ov-file#stream-video-ai-demo-server)
 
+  - update the `src/join.ts` file on line:10 `const baseUrl = "your localhost url here";` with an url to your local backend server
+  - for easier access from your testing devices, you can use [ngrok](https://ngrok.com/docs/getting-started/) to get a public url for your local server
+
 - then, you will need to run the client **Metro** dev server
 
 ```sh
