@@ -7,7 +7,7 @@ interface CallCredentials {
   cid: string;
 }
 
-const baseUrl = "https://stream-openai-d0716d0c2d64.herokuapp.com";
+const baseUrl = "your localhost url here";
 
 export async function fetchCallCredentials() {
   const res = await fetch(`${baseUrl}/credentials`);
