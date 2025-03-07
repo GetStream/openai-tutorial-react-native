@@ -7,7 +7,7 @@ interface CallCredentials {
   cid: string;
 }
 
-const baseUrl = "your localhost url here";
+const baseUrl = "https://stream-openai-d0716d0c2d64.herokuapp.com";
 
 export async function fetchCallCredentials() {
   const res = await fetch(`${baseUrl}/credentials`);
@@ -40,8 +40,8 @@ export async function joinCall(
   try {
     await Promise.all([connectAgent(call), call.join({ create: true })]);
   } catch (err) {
-    call.leave();
-    client.disconnectUser();
+    await call.leave();
+    await client.disconnectUser();
     throw err;
   }
 
