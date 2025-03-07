@@ -1,6 +1,10 @@
-# Stream Video AI Demo React Native app
+# Stream Video AI Demo React Native
 
 A React Native application that implements OpenAI integration for audio calls with visualization of the audio voices. Shows a glimpse of the AI-powered features that can be built using the Stream Video SDK.
+
+Here's a screenshot of the end result:
+
+<img src="app-preview.png" alt="app preview" width="250" height="500">
 
 ## What the app does
 
@@ -8,7 +12,14 @@ A React Native application that implements OpenAI integration for audio calls wi
 - Visualizes the audio of the agent and the user
 - Uses OpenAI to power the AI agent
 
-## Step 1: Start the backend and client servers
+### Prerequisites
+
+- You have followed the steps in the [Node.js server](https://github.com/GetStream/openai-tutorial-node) and you have a localhost running
+  - Stream account with API key and secret
+  - OpenAI API key with access to the Realtime API
+- Stream Video's iOS SDK (1.18.0 or above for the best experience)
+
+### Step 1: Start the backend and client servers
 
 - first you need to start the backend server.
   More info on the backend server can be found [here](https://github.com/GetStream/openai-tutorial-node?tab=readme-ov-file#stream-video-ai-demo-server)
@@ -26,7 +37,7 @@ npm start
 yarn start
 ```
 
-## Step 2: Build and run the app
+### Step 2: Build and run the app
 
 #### Android
 
@@ -60,6 +71,6 @@ npm run ios
 yarn ios
 ```
 
-## License
+### License
 
 This project is licensed under the BSD 3-Clause License - see the LICENSE file for details.
