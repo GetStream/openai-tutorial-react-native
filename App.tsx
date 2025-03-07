@@ -12,10 +12,11 @@ import {
 import { fetchCallCredentials, joinCall } from "./src/join";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AudioVisualizer } from "./src/AudioVisualizer";
+import inCallManager from "react-native-incall-manager";
 
 const credentialsPromise = fetchCallCredentials();
 
-function App(): React.JSX.Element {
+function App() {
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   const [call, setCall] = useState<Call | null>(null);
   const [status, setStatus] = useState<
@@ -30,6 +31,7 @@ function App(): React.JSX.Element {
         setClient(client);
         setCall(call);
         setStatus("joined-with-agent");
+        inCallManager.setSpeakerphoneOn(true);
       })
       .catch((err: any) => {
         console.error("Could not join call", err);
@@ -80,24 +82,14 @@ function CallLayout(props: {
   onLeave?: () => void;
 }) {
   const call = useCall();
-  const { useParticipants } = useCallStateHooks();
-  const participants = useParticipants();
-  const agentParticipant =
-    participants.find((p) => p.userId === "lucy") ?? null;
-  const humanParticipant =
-    participants.find((p) => p.userId !== "lucy") ?? null;
-  const audioLevel = agentParticipant?.isDominantSpeaker
-    ? agentParticipant?.audioLevel
-    : humanParticipant?.audioLevel;
-
+  const { useDominantSpeaker } = useCallStateHooks();
+  const dominantSpeaker = useDominantSpeaker();
   return (
     <>
-      {agentParticipant && (
-        <AudioVisualizer
-          colorScheme={agentParticipant.isDominantSpeaker ? "blue" : "red"}
-          audioLevel={audioLevel || 0}
-        />
-      )}
+      <AudioVisualizer
+        colorScheme={dominantSpeaker?.isLocalParticipant ? "red" : "blue"}
+        audioLevel={dominantSpeaker?.audioLevel || 0}
+      />
       <View style={styles.callControls}>
         <HangUpCallButton
           onPressHandler={() => {
